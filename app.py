@@ -33,14 +33,74 @@ def load_css():
 
 # Function to load Lottie animations
 def load_lottie_url(url: str):
-    r = requests.get(url)
-    if r.status_code != 200:
+    try:
+        r = requests.get(url, timeout=5)
+        if r.status_code != 200:
+            return None
+        return r.json()
+    except Exception as e:
+        st.error(f"Error loading animation: {str(e)}")
         return None
-    return r.json()
+        
+# Function to load local Lottie files as fallback
+def load_lottie_fallback():
+    # Simple JSON for a basic loading animation as fallback
+    return {
+        "v": "5.7.8",
+        "fr": 30,
+        "ip": 0,
+        "op": 60,
+        "w": 400,
+        "h": 400,
+        "nm": "Loading Animation",
+        "ddd": 0,
+        "assets": [],
+        "layers": [{
+            "ddd": 0,
+            "ind": 1,
+            "ty": 4,
+            "nm": "Circle",
+            "sr": 1,
+            "ks": {
+                "o": {"a": 0, "k": 100},
+                "r": {"a": 1, "k": [{"t": 0, "s": [0], "e": [360]}, {"t": 60, "s": [360]}]},
+                "p": {"a": 0, "k": [200, 200]},
+                "a": {"a": 0, "k": [0, 0]},
+                "s": {"a": 0, "k": [100, 100]}
+            },
+            "shapes": [{
+                "ty": "el",
+                "p": {"a": 0, "k": [0, 0]},
+                "s": {"a": 0, "k": [100, 100]},
+                "d": [],
+                "nm": "Ellipse Path 1"
+            }, {
+                "ty": "st",
+                "c": {"a": 0, "k": [0.31, 0.27, 0.9]},
+                "o": {"a": 0, "k": 100},
+                "w": {"a": 0, "k": 10},
+                "lc": 2,
+                "lj": 1,
+                "ml": 4,
+                "nm": "Stroke 1"
+            }, {
+                "ty": "tr",
+                "p": {"a": 0, "k": [0, 0]},
+                "a": {"a": 0, "k": [0, 0]},
+                "s": {"a": 0, "k": [80, 80]},
+                "r": {"a": 0, "k": 0},
+                "o": {"a": 0, "k": 100}
+            }]
+        }]
+    }
 
 # Function to display animated icons
 def display_lottie(animation, height=300, width=300):
-    st_lottie(animation, height=height, width=width, key=f"lottie_{int(time.time())}")
+    if animation is not None:
+        st_lottie(animation, height=height, width=width, key=f"lottie_{int(time.time())}")
+    else:
+        # Fallback when animation fails to load
+        st.info("Animation could not be loaded. Continuing without animation.")
 
 # Function to save uploaded resume
 def save_uploaded_resume(uploaded_file, user_id):
@@ -100,8 +160,10 @@ def login_form():
     </div>
     """, unsafe_allow_html=True)
     
-    # Load animation
+    # Load animation with fallback
     login_animation = load_lottie_url("https://assets3.lottiefiles.com/packages/lf20_q7hibrh9.json")
+    if login_animation is None:
+        login_animation = load_lottie_fallback()
     
     col1, col2 = st.columns([1, 1])
     
@@ -135,8 +197,10 @@ def signup_form():
     </div>
     """, unsafe_allow_html=True)
     
-    # Load animation
+    # Load animation with fallback
     signup_animation = load_lottie_url("https://assets5.lottiefiles.com/packages/lf20_q5pk6p1k.json")
+    if signup_animation is None:
+        signup_animation = load_lottie_fallback()
     
     col1, col2 = st.columns([1, 1])
     
@@ -252,8 +316,10 @@ def resume_upload_page():
     </div>
     """, unsafe_allow_html=True)
     
-    # Upload animation
+    # Upload animation with fallback
     upload_animation = load_lottie_url("https://assets9.lottiefiles.com/packages/lf20_nw19osms.json")
+    if upload_animation is None:
+        upload_animation = load_lottie_fallback()
     
     col1, col2 = st.columns([1, 1])
     
@@ -369,8 +435,10 @@ def my_resumes_page():
         </div>
         """, unsafe_allow_html=True)
         
-        # No resumes animation
+        # No resumes animation with fallback
         empty_animation = load_lottie_url("https://assets5.lottiefiles.com/packages/lf20_ydo1amjm.json")
+        if empty_animation is None:
+            empty_animation = load_lottie_fallback()
         display_lottie(empty_animation)
         
         st.markdown("""
@@ -541,8 +609,10 @@ def post_job_page():
                 
                 if job_id:
                     st.success("Job posted successfully!")
-                    # Show success animation
+                    # Show success animation with fallback
                     success_animation = load_lottie_url("https://assets6.lottiefiles.com/packages/lf20_swnc1xqy.json")
+                    if success_animation is None:
+                        success_animation = load_lottie_fallback()
                     display_lottie(success_animation, height=150)
                 else:
                     st.error("Error posting job. Please try again.")
