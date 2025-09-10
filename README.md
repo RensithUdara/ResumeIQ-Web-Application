@@ -16,6 +16,7 @@ This project is currently in active development. If you encounter any issues, pl
 - **Job-Resume Matching**: Match resumes to job postings based on skills and requirements
 - **Improvement Suggestions**: Get actionable feedback to improve your resume
 - **Dual Interface**: Separate interfaces for job seekers and recruiters
+- **Guest Mode**: Use the application without creating an account to quickly analyze resumes
 - **Modern UI**: Clean, responsive design with animations and intuitive navigation
 
 ## Technologies Used
@@ -70,11 +71,11 @@ The application will be accessible at http://localhost:8501 in your web browser.
 
 ### For Job Seekers
 
-1. Create an account as a job seeker
+1. Create an account as a job seeker or use the Guest Mode for quick analysis
 2. Upload your resume in PDF or DOCX format
 3. View detailed analysis including skills detection, education verification, and experience extraction
 4. Get a score and improvement suggestions for your resume
-5. Match your resume with available job postings
+5. Match your resume with available job postings (account required)
 
 ### For Recruiters
 
