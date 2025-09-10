@@ -1,8 +1,8 @@
-# Smart Resume Analyzer
+# ResumeIQ Web Application
 
 An AI-driven web application designed to automate and enhance the resume screening process for both job seekers and recruiters. By leveraging Natural Language Processing (NLP) and structured rule-based evaluation, it provides transparent, actionable feedback, helping candidates optimize their resumes for modern recruitment systems and enabling recruiters to efficiently identify the best-fit candidates.
 
-![Smart Resume Analyzer](https://img.icons8.com/fluency/96/000000/resume.png)
+![ResumeIQ Web Application](https://img.icons8.com/fluency/96/000000/resume.png)
 
 ## Features
 
