@@ -29,7 +29,7 @@ from utils.resume_parser import analyze_resume, match_resume_to_job
 
 # Set page configuration
 st.set_page_config(
-    page_title="Smart Resume Analyzer",
+    page_title="ResumeIQ Web Application",
     page_icon="📑",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -40,8 +40,23 @@ db = DatabaseManager()
 
 # Function to load custom CSS
 def load_css():
-    with open('static/css/style.css') as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    try:
+        with open('static/css/style.css') as f:
+            st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    except FileNotFoundError:
+        st.warning("CSS file not found. Using default styling.")
+        # Apply some minimal default styling
+        st.markdown("""
+        <style>
+        .custom-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        </style>
+        """, unsafe_allow_html=True)
 
 # Function to load Lottie animations
 def load_lottie_url(url: str):
@@ -255,40 +270,72 @@ def logout():
 
 # Main App UI
 def main():
+    # Check if required packages are available
+    if option_menu is None or st_lottie is None:
+        st.error("Required packages are missing. Please install them using the following command:")
+        st.code("pip install streamlit-option-menu streamlit-lottie")
+        st.warning("After installing the required packages, please restart the application.")
+        return
+    
     # Sidebar
     with st.sidebar:
-        st.image("https://img.icons8.com/fluency/96/000000/resume.png", width=80)
-        st.title("Smart Resume Analyzer")
+        try:
+            st.image("https://img.icons8.com/fluency/96/000000/resume.png", width=80)
+        except:
+            st.write("📑") # Fallback icon
+            
+        st.title("ResumeIQ Web Application")
         
         if st.session_state.logged_in:
             st.write(f"Welcome, **{st.session_state.username}**!")
             
             if st.session_state.user_type == "job_seeker":
-                menu = option_menu(
-                    "Main Menu",
-                    ["Resume Upload", "My Resumes", "Job Matching", "About"],
-                    icons=["cloud-upload", "file-earmark-text", "briefcase", "info-circle"],
-                    menu_icon="list",
-                    default_index=0,
-                )
+                try:
+                    menu = option_menu(
+                        "Main Menu",
+                        ["Resume Upload", "My Resumes", "Job Matching", "About"],
+                        icons=["cloud-upload", "file-earmark-text", "briefcase", "info-circle"],
+                        menu_icon="list",
+                        default_index=0,
+                    )
+                except Exception as e:
+                    st.error(f"Error displaying menu: {str(e)}")
+                    menu = st.radio(
+                        "Main Menu",
+                        ["Resume Upload", "My Resumes", "Job Matching", "About"]
+                    )
             else:  # recruiter
-                menu = option_menu(
-                    "Main Menu",
-                    ["Post Job", "My Postings", "Resume Matching", "About"],
-                    icons=["pencil-square", "clipboard-check", "people", "info-circle"],
-                    menu_icon="list",
-                    default_index=0,
-                )
+                try:
+                    menu = option_menu(
+                        "Main Menu",
+                        ["Post Job", "My Postings", "Resume Matching", "About"],
+                        icons=["pencil-square", "clipboard-check", "people", "info-circle"],
+                        menu_icon="list",
+                        default_index=0,
+                    )
+                except Exception as e:
+                    st.error(f"Error displaying menu: {str(e)}")
+                    menu = st.radio(
+                        "Main Menu",
+                        ["Post Job", "My Postings", "Resume Matching", "About"]
+                    )
                 
             st.button("Logout", on_click=logout)
         else:
-            auth_option = option_menu(
-                "Authentication",
-                ["Login", "Signup"],
-                icons=["box-arrow-in-right", "person-plus"],
-                menu_icon="lock",
-                default_index=0,
-            )
+            try:
+                auth_option = option_menu(
+                    "Authentication",
+                    ["Login", "Signup"],
+                    icons=["box-arrow-in-right", "person-plus"],
+                    menu_icon="lock",
+                    default_index=0,
+                )
+            except Exception as e:
+                st.error(f"Error displaying authentication menu: {str(e)}")
+                auth_option = st.radio(
+                    "Authentication",
+                    ["Login", "Signup"]
+                )
     
     # Main content
     if not st.session_state.logged_in:
