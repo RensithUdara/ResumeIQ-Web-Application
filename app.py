@@ -901,7 +901,7 @@ def my_resumes_page():
 def job_matching_page():
     st.markdown("""
     <div class="custom-card">
-        <h1 style="color: #4F46E5; text-align: center;">Job Matching</h1>
+        <h1 style="color: #0071e3; text-align: center;">Job Matching</h1>
         <p style="text-align: center;">Find jobs that match your resume</p>
     </div>
     """, unsafe_allow_html=True)
