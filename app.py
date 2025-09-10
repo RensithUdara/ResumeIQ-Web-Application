@@ -570,78 +570,183 @@ def resume_upload_page(guest_mode=False):
                         st.error(analysis_result["message"])
 
 def display_resume_analysis(analysis):
-    # Display score
-    col1, col2, col3 = st.columns([1, 1, 1])
+    # Header section
+    st.markdown("""
+    <div class="custom-card">
+        <h2 style="color: #0071e3; margin-bottom: 15px;">Resume Analysis Results</h2>
+        <p style="color: #6c757d;">Detailed insights and improvement recommendations for your resume</p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    with col1:
-        st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
-        st.plotly_chart(create_score_gauge(analysis["score"]), use_container_width=True)
-        st.markdown(f"<div style='text-align: center;'><h3>Overall Score</h3></div>", unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+    # Display metrics in a modern layout
+    st.markdown("""
+    <style>
+    .metric-container {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    .metric-card {
+        background-color: white;
+        border-radius: 12px;
+        padding: 20px;
+        flex: 1;
+        min-width: 180px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        text-align: center;
+    }
+    .metric-value {
+        font-size: 36px;
+        font-weight: 700;
+        color: #0071e3;
+        margin: 10px 0;
+    }
+    .metric-label {
+        font-size: 14px;
+        color: #6c757d;
+        font-weight: 500;
+    }
+    </style>
     
-    with col2:
-        st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
-        st.metric("Skills Detected", len(analysis["skills"]))
-        st.markdown("</div>", unsafe_allow_html=True)
-    
-    with col3:
-        st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
-        st.metric("Content Length", analysis["text_length"], "characters")
-        st.markdown("</div>", unsafe_allow_html=True)
+    <div class="metric-container">
+        <div class="metric-card">
+            <div class="metric-label">OVERALL SCORE</div>
+            <div class="metric-value">{analysis["score"]}%</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">SKILLS DETECTED</div>
+            <div class="metric-value">{len(analysis["skills"])}</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">CONTENT LENGTH</div>
+            <div class="metric-value">{analysis["text_length"]}</div>
+            <div class="metric-label">CHARACTERS</div>
+        </div>
+    </div>
+    """.format(
+        score=analysis["score"],
+        skills_count=len(analysis["skills"]),
+        text_length=analysis["text_length"]
+    ), unsafe_allow_html=True)
     
     # Display tabs with detailed information
-    tab1, tab2, tab3, tab4 = st.tabs(["Skills", "Education", "Experience", "Suggestions"])
+    tab1, tab2, tab3, tab4 = st.tabs(["🔍 Skills", "🎓 Education", "💼 Experience", "💡 Suggestions"])
     
     with tab1:
-        st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
-        st.markdown("### Detected Skills")
+        st.markdown("""
+        <div class="custom-card">
+            <h3 style="color: #0071e3; margin-bottom: 15px;">Detected Skills</h3>
+        """, unsafe_allow_html=True)
+        
         if analysis["skills"]:
-            skills_html = ""
+            # Group skills by categories if possible
+            skill_categories = {
+                "Programming": [],
+                "Database": [],
+                "Web": [],
+                "Cloud": [],
+                "Soft Skills": [],
+                "Other": []
+            }
+            
+            # Simple categorization logic - can be enhanced with more sophisticated categorization
             for skill in analysis["skills"]:
-                skills_html += f"<span class='skill-tag'>{skill}</span>"
-            st.markdown(f"<div style='line-height: 2.5;'>{skills_html}</div>", unsafe_allow_html=True)
+                skill_lower = skill.lower()
+                if skill_lower in ["python", "java", "javascript", "c++", "c#", "typescript", "ruby", "php", "go"]:
+                    skill_categories["Programming"].append(skill)
+                elif skill_lower in ["sql", "mysql", "postgresql", "mongodb", "oracle", "database"]:
+                    skill_categories["Database"].append(skill)
+                elif skill_lower in ["html", "css", "react", "angular", "vue", "django", "flask", "node"]:
+                    skill_categories["Web"].append(skill)
+                elif skill_lower in ["aws", "azure", "gcp", "docker", "kubernetes", "cloud"]:
+                    skill_categories["Cloud"].append(skill)
+                elif skill_lower in ["leadership", "communication", "teamwork", "problem solving", "management"]:
+                    skill_categories["Soft Skills"].append(skill)
+                else:
+                    skill_categories["Other"].append(skill)
+            
+            # Display skills by category
+            for category, skills in skill_categories.items():
+                if skills:
+                    st.markdown(f"<h4 style='margin-top: 15px; margin-bottom: 10px; color: #495057;'>{category}</h4>", unsafe_allow_html=True)
+                    skills_html = ""
+                    for skill in skills:
+                        skills_html += f"<span class='skill-tag'>{skill}</span>"
+                    st.markdown(f"<div style='line-height: 2.8;'>{skills_html}</div>", unsafe_allow_html=True)
         else:
             st.warning("No skills detected. Consider adding more technical skills to your resume.")
         st.markdown("</div>", unsafe_allow_html=True)
     
     with tab2:
-        st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
-        st.markdown("### Education Details")
+        st.markdown("""
+        <div class="custom-card">
+            <h3 style="color: #0071e3; margin-bottom: 15px;">Education Details</h3>
+        """, unsafe_allow_html=True)
+        
         if analysis["education"]:
             for edu in analysis["education"]:
-                st.markdown(f"• {edu}")
+                st.markdown("""
+                <div style="background-color: #f8f9fa; border-left: 3px solid #0071e3; padding: 12px; margin-bottom: 10px; border-radius: 4px;">
+                    <p style="margin: 0;">{}</p>
+                </div>
+                """.format(edu), unsafe_allow_html=True)
         else:
             st.warning("No education details detected. Make sure your education section is clearly formatted.")
         st.markdown("</div>", unsafe_allow_html=True)
     
     with tab3:
-        st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
-        st.markdown("### Experience Details")
+        st.markdown("""
+        <div class="custom-card">
+            <h3 style="color: #0071e3; margin-bottom: 15px;">Experience Details</h3>
+        """, unsafe_allow_html=True)
+        
         if analysis["experience"]:
             for exp in analysis["experience"]:
-                st.markdown(f"• {exp}")
+                st.markdown("""
+                <div style="background-color: #f8f9fa; border-left: 3px solid #0071e3; padding: 12px; margin-bottom: 10px; border-radius: 4px;">
+                    <p style="margin: 0;">{}</p>
+                </div>
+                """.format(exp), unsafe_allow_html=True)
         else:
             st.warning("No work experience detected. Make sure your work experience section is clearly formatted.")
         st.markdown("</div>", unsafe_allow_html=True)
     
     with tab4:
-        st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
-        st.markdown("### Improvement Suggestions")
-        for suggestion in analysis["suggestions"]:
-            st.markdown(f"• {suggestion}")
+        st.markdown("""
+        <div class="custom-card">
+            <h3 style="color: #0071e3; margin-bottom: 15px;">Improvement Suggestions</h3>
+        """, unsafe_allow_html=True)
+        
+        if analysis["suggestions"]:
+            for i, suggestion in enumerate(analysis["suggestions"]):
+                st.markdown(f"""
+                <div style="background-color: #fff8f0; border-left: 3px solid #ff9500; padding: 12px; margin-bottom: 10px; border-radius: 4px;">
+                    <p style="margin: 0; color: #495057;"><strong>Suggestion {i+1}:</strong> {suggestion}</p>
+                </div>
+                """, unsafe_allow_html=True)
+        else:
+            st.info("No specific suggestions available for this resume.")
         st.markdown("</div>", unsafe_allow_html=True)
     
     # Display word cloud
     if "wordcloud_path" in analysis and analysis["wordcloud_path"]:
-        st.markdown("<div class='custom-card'>", unsafe_allow_html=True)
-        st.markdown("### Resume Word Cloud")
+        st.markdown("""
+        <div class="custom-card">
+            <h3 style="color: #0071e3; margin-bottom: 15px;">Resume Word Cloud</h3>
+            <div style="text-align: center;">
+        """, unsafe_allow_html=True)
         st.image(analysis["wordcloud_path"])
-        st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown("""
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
 def my_resumes_page():
     st.markdown("""
     <div class="custom-card">
-        <h1 style="color: #4F46E5; text-align: center;">My Resumes</h1>
+        <h1 style="color: #0071e3; text-align: center;">My Resumes</h1>
         <p style="text-align: center;">View and manage all your uploaded resumes</p>
     </div>
     """, unsafe_allow_html=True)
@@ -650,8 +755,11 @@ def my_resumes_page():
     
     if not resumes:
         st.markdown("""
-        <div class="custom-card">
-            <p style="text-align: center;">You haven't uploaded any resumes yet.</p>
+        <div style="text-align: center; padding: 40px 20px; background-color: white; border-radius: 12px; margin: 20px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <img src="https://img.icons8.com/fluency/96/000000/empty-box.png" width="80">
+            <h3 style="color: #0071e3; margin-top: 20px;">No Resumes Yet</h3>
+            <p style="color: #6c757d; margin-bottom: 20px;">You haven't uploaded any resumes yet.</p>
+            <a href="#" style="background-color: #0071e3; color: white; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-weight: 500;">Upload Your First Resume</a>
         </div>
         """, unsafe_allow_html=True)
         
@@ -659,13 +767,7 @@ def my_resumes_page():
         empty_animation = load_lottie_url("https://assets5.lottiefiles.com/packages/lf20_ydo1amjm.json")
         if empty_animation is None:
             empty_animation = load_lottie_fallback()
-        display_lottie(empty_animation)
-        
-        st.markdown("""
-        <div class="custom-card">
-            <p style="text-align: center;">Head over to the Resume Upload section to analyze your first resume!</p>
-        </div>
-        """, unsafe_allow_html=True)
+        display_lottie(empty_animation, height=200)
     else:
         # Display resumes in cards
         for resume in resumes:
