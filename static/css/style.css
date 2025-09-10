@@ -1,42 +1,42 @@
-/* Modern Professional UI for ResumeIQ Web Application */
+/* Modern Clean UI for ResumeIQ Web Application */
 
 /* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap');
 
 /* CSS Variables for Theming */
 :root {
-  /* Primary Color Palette - Vibrant Gradient */
-  --primary-gradient: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
-  --primary-color: #6366F1;
-  --primary-light: #818CF8;
-  --primary-dark: #4F46E5;
+  /* Primary Color Palette - Blue Focus */
+  --primary-gradient: linear-gradient(135deg, #0071e3 0%, #42a5f5 100%);
+  --primary-color: #0071e3;
+  --primary-light: #42a5f5;
+  --primary-dark: #0053aa;
   
   /* Secondary Colors */
-  --secondary-color: #F59E0B;
-  --secondary-light: #FBBF24;
-  --secondary-dark: #D97706;
+  --secondary-color: #00c16e;
+  --secondary-light: #4caf50;
+  --secondary-dark: #008148;
   
   /* Accent Colors */
-  --accent-success: #10B981;
-  --accent-info: #3B82F6;
-  --accent-warning: #F59E0B;
-  --accent-danger: #EF4444;
+  --accent-success: #00c16e;
+  --accent-info: #0071e3;
+  --accent-warning: #ff9500;
+  --accent-danger: #ff3b30;
   
   /* Neutral Colors */
-  --neutral-50: #F9FAFB;
-  --neutral-100: #F3F4F6;
-  --neutral-200: #E5E7EB;
-  --neutral-300: #D1D5DB;
-  --neutral-400: #9CA3AF;
-  --neutral-500: #6B7280;
-  --neutral-600: #4B5563;
-  --neutral-700: #374151;
-  --neutral-800: #1F2937;
-  --neutral-900: #111827;
+  --neutral-50: #f8f9fa;
+  --neutral-100: #f1f3f5;
+  --neutral-200: #e9ecef;
+  --neutral-300: #dee2e6;
+  --neutral-400: #ced4da;
+  --neutral-500: #adb5bd;
+  --neutral-600: #6c757d;
+  --neutral-700: #495057;
+  --neutral-800: #343a40;
+  --neutral-900: #212529;
   
   /* Backgrounds */
-  --bg-main: #F9FAFB;
+  --bg-main: #f8f9fa;
   --bg-card: #FFFFFF;
   --bg-sidebar: #FFFFFF;
   
@@ -73,29 +73,33 @@ body {
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-main);
   color: var(--text-primary);
+  line-height: 1.5;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-weight: 600;
 }
 
 /* Streamlit App Container */
 .stApp {
-  background: linear-gradient(to bottom right, var(--neutral-50), var(--neutral-100));
+  background-color: var(--bg-main);
+  max-width: 1440px;
+  margin: 0 auto;
 }
 
 /* Header styling */
 header {
   background-color: var(--bg-sidebar) !important;
-  backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--neutral-200);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 /* Sidebar styling */
-.css-1d391kg {  /* Sidebar background */
+section[data-testid="stSidebar"] > div {
   background-color: var(--bg-sidebar);
-  border-right: 1px solid var(--neutral-200);
+  border-right: none;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
 }
 
 /* Sidebar title */
@@ -108,16 +112,16 @@ header {
 /* Custom Cards */
 .custom-card {
   background-color: var(--bg-card);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  padding: var(--space-lg);
-  margin-bottom: var(--space-lg);
-  border: 1px solid var(--neutral-200);
-  transition: all 0.3s ease;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  margin-bottom: 20px;
+  border: none;
+  transition: all 0.2s ease;
 }
 
 .custom-card:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
   transform: translateY(-2px);
 }
 
@@ -158,27 +162,39 @@ header {
 
 /* Buttons */
 .stButton > button {
-  border-radius: var(--radius-md);
+  border-radius: 8px;
   font-weight: 500;
-  padding: var(--space-sm) var(--space-lg);
+  padding: 10px 16px;
   transition: all 0.2s ease;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 113, 227, 0.2);
+  font-size: 14px;
 }
 
 .stButton > button:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 113, 227, 0.3);
+  filter: brightness(1.05);
+}
+
+.stButton > button:active {
+  transform: translateY(0);
+  filter: brightness(0.95);
 }
 
 .primary-button > button {
-  background: var(--primary-gradient);
+  background: var(--primary-color);
   color: white;
   border: none;
 }
 
 .secondary-button > button {
-  background-color: var(--bg-card);
+  background-color: rgba(0, 113, 227, 0.1);
   color: var(--primary-color);
-  border: 1px solid var(--primary-color);
+  border: none;
+  box-shadow: none;
 }
 
 .success-button > button {
