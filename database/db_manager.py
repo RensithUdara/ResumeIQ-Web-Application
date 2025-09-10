@@ -144,6 +144,20 @@ class DatabaseManager:
             return dict(analysis)
         else:
             return None
+            
+    def get_resume_score(self, resume_id):
+        """Get only the score for a specific resume (for display in cards)"""
+        conn = self._connect()
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT score FROM analysis_results WHERE resume_id = ? ORDER BY analyzed_at DESC", (resume_id,))
+        result = cursor.fetchone()
+        conn.close()
+        
+        if result:
+            return result['score']
+        else:
+            return 0
     
     # Job Posting Management (for recruiters)
     def create_job_posting(self, user_id, title, description, required_skills, required_education, required_experience):

@@ -769,55 +769,139 @@ def my_resumes_page():
             empty_animation = load_lottie_fallback()
         display_lottie(empty_animation, height=200)
     else:
-        # Display resumes in cards
+        # Display header
+        st.markdown("""
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="color: #0071e3; margin: 0;">My Resume Collection</h2>
+            <span style="background-color: #e1f0ff; color: #0071e3; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 500;">
+                {} Resumes
+            </span>
+        </div>
+        """.format(len(resumes)), unsafe_allow_html=True)
+        
+        # Display resumes in cards with modern styling
+        st.markdown("""
+        <style>
+        .resume-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .resume-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+        .resume-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+        }
+        .resume-header {
+            background-color: #0071e3;
+            color: white;
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .resume-content {
+            padding: 16px;
+        }
+        .resume-footer {
+            border-top: 1px solid #f1f3f5;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .resume-date {
+            color: #6c757d;
+            font-size: 13px;
+        }
+        .resume-score {
+            background-color: #e1f0ff;
+            color: #0071e3;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        </style>
+        
+        <div class="resume-grid">
+        """, unsafe_allow_html=True)
+        
+        # Create cards for each resume
         for resume in resumes:
-            col1, col2 = st.columns([3, 1])
+            score = db.get_resume_score(resume['id'])
             
-            with col1:
-                st.markdown(f"""
-                <div class="custom-card">
-                    <h3>{resume['filename']}</h3>
-                    <p>Uploaded on: {resume['uploaded_at']}</p>
+            st.markdown(f"""
+            <div class="resume-card" id="resume-{resume['id']}">
+                <div class="resume-header">
+                    <h4 style="margin: 0; font-weight: 500;">{resume['filename']}</h4>
                 </div>
-                """, unsafe_allow_html=True)
+                <div class="resume-content">
+                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <img src="https://img.icons8.com/fluency/48/000000/document.png" width="36" style="margin-right: 12px;">
+                        <div>
+                            <div style="font-weight: 500; color: #212529;">{os.path.splitext(resume['filename'])[0]}</div>
+                            <div class="resume-date">Uploaded on {resume['uploaded_at']}</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="resume-score">Score: {score}%</span>
+                    </div>
+                </div>
+                <div class="resume-footer">
+                    <button onclick="document.getElementById('view-btn-{resume['id']}').click()" 
+                            style="background-color: #0071e3; color: white; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-size: 13px; font-weight: 500;">
+                        View Analysis
+                    </button>
+                    <button onclick="document.getElementById('delete-btn-{resume['id']}').click()" 
+                            style="background-color: rgba(255,59,48,0.1); color: #ff3b30; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; font-size: 13px; font-weight: 500;">
+                        Delete
+                    </button>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
             
-            with col2:
-                if st.button(f"View Analysis", key=f"view_{resume['id']}"):
-                    # Get analysis results
-                    analysis = db.get_resume_analysis(resume['id'])
-                    
-                    if analysis:
-                        # Convert string data back to lists
-                        skills = analysis['skills'].split(", ") if analysis['skills'] else []
-                        education = analysis['education'].split(", ") if analysis['education'] else []
-                        experience = analysis['experience'].split(", ") if analysis['experience'] else []
-                        suggestions = analysis['feedback'].split(", ") if analysis['feedback'] else []
-                        
-                        # Create analysis dict
-                        analysis_result = {
-                            "status": "success",
-                            "skills": skills,
-                            "education": education,
-                            "experience": experience,
-                            "score": analysis['score'],
-                            "suggestions": suggestions,
-                            "text_length": 0  # Not stored in DB
-                        }
-                        
-                        # Display analysis
-                        display_resume_analysis(analysis_result)
-                    else:
-                        st.warning("No analysis found for this resume. Try re-uploading it.")
+            # Hidden buttons that will be clicked by the JavaScript in the HTML
+            if st.button("View", key=f"view-btn-{resume['id']}", help="View resume analysis", style="visibility: hidden;"):
+                # Get analysis results
+                analysis = db.get_resume_analysis(resume['id'])
                 
-                if st.button(f"Delete", key=f"delete_{resume['id']}"):
-                    # Implement delete functionality
-                    # This would need additional DB methods
-                    st.error("Delete functionality not yet implemented")
+                if analysis:
+                    # Convert string data back to lists
+                    skills = analysis['skills'].split(", ") if analysis['skills'] else []
+                    education = analysis['education'].split(", ") if analysis['education'] else []
+                    experience = analysis['experience'].split(", ") if analysis['experience'] else []
+                    suggestions = analysis['feedback'].split(", ") if analysis['feedback'] else []
+                    
+                    # Create analysis dict
+                    analysis_result = {
+                        "status": "success",
+                        "skills": skills,
+                        "education": education,
+                        "experience": experience,
+                        "score": analysis['score'],
+                        "suggestions": suggestions,
+                        "text_length": 0  # Not stored in DB
+                    }
+                    
+                    # Display analysis
+                    display_resume_analysis(analysis_result)
+                else:
+                    st.warning("No analysis found for this resume. Try re-uploading it.")
+            
+            if st.button("Delete", key=f"delete-btn-{resume['id']}", help="Delete this resume", style="visibility: hidden;"):
+                # Implement delete functionality
+                st.error("Delete functionality not yet implemented")
 
 def job_matching_page():
     st.markdown("""
     <div class="custom-card">
-        <h1 style="color: #4F46E5; text-align: center;">Job Matching</h1>
+        <h1 style="color: #0071e3; text-align: center;">Job Matching</h1>
         <p style="text-align: center;">Find jobs that match your resume</p>
     </div>
     """, unsafe_allow_html=True)
