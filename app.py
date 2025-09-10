@@ -348,12 +348,38 @@ def main():
                     )
                 
             st.button("Logout", on_click=logout)
+        elif st.session_state.guest_mode:
+            st.markdown("""<div class="guest-banner">Guest Mode</div>""", unsafe_allow_html=True)
+            
+            try:
+                menu = option_menu(
+                    "Menu",
+                    ["Analyze Resume", "About"],
+                    icons=["file-earmark-text", "info-circle"],
+                    menu_icon="list",
+                    default_index=0,
+                )
+            except Exception as e:
+                st.error(f"Error displaying menu: {str(e)}")
+                menu = st.radio(
+                    "Menu",
+                    ["Analyze Resume", "About"]
+                )
+            
+            with st.expander("Want to save your results?"):
+                st.write("Create an account to save your resume analysis history and match with job opportunities.")
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.button("Sign Up", on_click=disable_guest_mode, key="signup_from_guest")
+                with col2:
+                    st.button("Login", on_click=disable_guest_mode, key="login_from_guest")
+                
         else:
             try:
                 auth_option = option_menu(
                     "Authentication",
-                    ["Login", "Signup"],
-                    icons=["box-arrow-in-right", "person-plus"],
+                    ["Login", "Signup", "Guest Mode"],
+                    icons=["box-arrow-in-right", "person-plus", "person-incognito"],
                     menu_icon="lock",
                     default_index=0,
                 )
@@ -361,16 +387,11 @@ def main():
                 st.error(f"Error displaying authentication menu: {str(e)}")
                 auth_option = st.radio(
                     "Authentication",
-                    ["Login", "Signup"]
+                    ["Login", "Signup", "Guest Mode"]
                 )
     
     # Main content
-    if not st.session_state.logged_in:
-        if 'auth_option' in locals() and auth_option == "Login":
-            login_form()
-        else:
-            signup_form()
-    else:
+    if st.session_state.logged_in:
         # Job Seeker Interface
         if st.session_state.user_type == "job_seeker":
             if menu == "Resume Upload":
@@ -392,6 +413,25 @@ def main():
                 resume_matching_page()
             else:
                 about_page()
+    
+    elif st.session_state.guest_mode:
+        # Guest Mode Interface
+        if menu == "Analyze Resume":
+            resume_upload_page(guest_mode=True)
+        else:
+            about_page()
+            
+    else:
+        # Authentication pages
+        if 'auth_option' in locals():
+            if auth_option == "Login":
+                login_form()
+            elif auth_option == "Signup":
+                signup_form()
+            elif auth_option == "Guest Mode":
+                enable_guest_mode()
+        else:
+            signup_form()
 
 # Page content functions
 def resume_upload_page():
