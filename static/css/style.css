@@ -387,6 +387,156 @@ header {
   font-weight: bold;
 }
 
+/* Form Styling */
+.stTextInput > div > div > input {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--neutral-300);
+  padding: var(--space-md);
+}
+
+.stTextInput > div > div > input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.stSelectbox > div > div {
+  border-radius: var(--radius-md);
+}
+
+/* Custom Select Box */
+.stSelectbox select {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--neutral-300);
+  padding: var(--space-md);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: var(--space-lg);
+  margin-top: var(--space-2xl);
+  border-top: 1px solid var(--neutral-200);
+  color: var(--text-secondary);
+}
+
+/* Guest mode banner */
+.guest-banner {
+  background: linear-gradient(135deg, var(--secondary-light), var(--secondary-color));
+  color: white;
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+  text-align: center;
+}
+
+/* Progress steps */
+.steps-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-xl);
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  right: -50%;
+  width: 100%;
+  height: 2px;
+  background-color: var(--neutral-300);
+  z-index: 0;
+}
+
+.step.active:not(:last-child)::after {
+  background-color: var(--primary-color);
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--neutral-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: white;
+  z-index: 1;
+  margin-bottom: var(--space-sm);
+}
+
+.step.active .step-number {
+  background-color: var(--primary-color);
+}
+
+.step.completed .step-number {
+  background-color: var(--accent-success);
+}
+
+.step-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.step.active .step-label {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* Dashboard cards */
+.dashboard-card {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-md);
+  background-color: var(--bg-card);
+  transition: all 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.dashboard-card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.dashboard-card-icon {
+  background: var(--primary-gradient);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--space-sm);
+  color: white;
+  font-size: 20px;
+}
+
+.dashboard-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dashboard-card-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
 /* Responsive Design */
 @media screen and (max-width: 768px) {
   .hero {
