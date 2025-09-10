@@ -92,7 +92,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
 .venv
 env/
 venv/
@@ -125,7 +124,6 @@ dmypy.json
 cython_debug/
 
 # VSCode
-.vscode/
 *.code-workspace
 
 # Project specific
@@ -134,3 +132,5 @@ uploads/*
 database/resume_analyzer.db
 static/images/*
 !static/images/.gitkeep
+config.bat
+node_modules
