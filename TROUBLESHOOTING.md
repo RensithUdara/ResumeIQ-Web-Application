@@ -96,6 +96,22 @@ To run the application correctly:
    streamlit run app.py
    ```
 
+## Automatic Fix Script
+
+We've provided an automatic fix script that can resolve most common issues:
+
+```
+python fix.py
+```
+
+This script will:
+1. Check your Python version
+2. Install required dependencies
+3. Download the spaCy model
+4. Set up the database
+5. Create required directories
+6. Check and create CSS files if missing
+
 ## Contact for Support
 
 If you continue to experience issues, please open an issue on the GitHub repository.
