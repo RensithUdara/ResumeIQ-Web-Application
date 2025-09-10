@@ -498,7 +498,7 @@ def resume_upload_page(guest_mode=False):
         
     st.markdown(f"""
     <div class="custom-card">
-        <h1 style="color: #4F46E5; text-align: center;">{title_text}</h1>
+        <h1 style="color: #0071e3; text-align: center;">{title_text}</h1>
         <p style="text-align: center;">Upload your resume to get detailed analysis and improvement suggestions</p>
     </div>
     """, unsafe_allow_html=True)
@@ -511,10 +511,26 @@ def resume_upload_page(guest_mode=False):
     col1, col2 = st.columns([1, 1])
     
     with col1:
-        display_lottie(upload_animation, height=250)
+        st.markdown("""
+        <div style="background-color: #f0f7ff; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+            <h3 style="color: #0071e3; margin-bottom: 15px;">How It Works</h3>
+            <ol style="margin-left: 20px; color: #343a40;">
+                <li style="margin-bottom: 8px;"><strong>Upload</strong> your resume (PDF or DOCX)</li>
+                <li style="margin-bottom: 8px;"><strong>Analyze</strong> skills, education & experience</li>
+                <li style="margin-bottom: 8px;"><strong>Get</strong> personalized improvement suggestions</li>
+                <li style="margin-bottom: 8px;"><strong>Improve</strong> your resume with AI-powered insights</li>
+            </ol>
+        </div>
+        """, unsafe_allow_html=True)
+        display_lottie(upload_animation, height=200)
     
     with col2:
-        uploaded_file = st.file_uploader("Upload Your Resume (PDF or DOCX)", type=['pdf', 'docx'])
+        st.markdown("""
+        <div style="background-color: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <h3 style="color: #0071e3; margin-bottom: 15px;">Resume Upload</h3>
+        </div>
+        """, unsafe_allow_html=True)
+        uploaded_file = st.file_uploader("Drag and drop your resume here", type=['pdf', 'docx'])
         
         if uploaded_file is not None:
             if guest_mode:
