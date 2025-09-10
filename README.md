@@ -4,6 +4,10 @@ An AI-driven web application designed to automate and enhance the resume screeni
 
 ![ResumeIQ Web Application](https://img.icons8.com/fluency/96/000000/resume.png)
 
+## Status
+
+This project is currently in active development. If you encounter any issues, please check the [troubleshooting guide](TROUBLESHOOTING.md) or report them in the GitHub issues section.
+
 ## Features
 
 - **Resume Analysis**: Extract key information from resumes including skills, education, and work experience
@@ -121,3 +125,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - Icon8 for the resume icon
 - LottieFiles for the animations used in the application
+
+## Troubleshooting
+
+If you encounter any issues while setting up or running the application, please refer to the [troubleshooting guide](TROUBLESHOOTING.md) for common problems and solutions.
