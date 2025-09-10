@@ -30,9 +30,14 @@ from utils.resume_parser import analyze_resume, match_resume_to_job
 # Set page configuration
 st.set_page_config(
     page_title="ResumeIQ Web Application",
-    page_icon="📑",
+    page_icon="�",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
+    menu_items={
+        'About': "# ResumeIQ Web Application\nAn AI-driven tool for resume analysis and job matching.",
+        'Report a bug': "https://github.com/RensithUdara/ResumeIQ-Web-Application/issues",
+        'Get help': "https://github.com/RensithUdara/ResumeIQ-Web-Application/blob/main/TROUBLESHOOTING.md"
+    }
 )
 
 # Initialize database
@@ -175,6 +180,18 @@ if 'user_type' not in st.session_state:
 
 if 'username' not in st.session_state:
     st.session_state.username = None
+    
+if 'guest_mode' not in st.session_state:
+    st.session_state.guest_mode = False
+    
+if 'current_analysis' not in st.session_state:
+    st.session_state.current_analysis = None
+    
+if 'current_step' not in st.session_state:
+    st.session_state.current_step = 1
+    
+if 'resume_history' not in st.session_state:
+    st.session_state.resume_history = []
 
 # Load custom CSS
 load_css()
@@ -266,6 +283,16 @@ def logout():
     st.session_state.user_id = None
     st.session_state.user_type = None
     st.session_state.username = None
+    st.session_state.guest_mode = False
+    st.experimental_rerun()
+
+def enable_guest_mode():
+    st.session_state.guest_mode = True
+    st.session_state.user_type = "job_seeker"
+    st.experimental_rerun()
+    
+def disable_guest_mode():
+    st.session_state.guest_mode = False
     st.experimental_rerun()
 
 # Main App UI
@@ -282,7 +309,7 @@ def main():
         try:
             st.image("https://img.icons8.com/fluency/96/000000/resume.png", width=80)
         except:
-            st.write("📑") # Fallback icon
+            st.write("�") # Fallback icon
             
         st.title("ResumeIQ Web Application")
         
