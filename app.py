@@ -7,9 +7,21 @@ import pandas as pd
 import plotly.express as px
 import matplotlib.pyplot as plt
 from PIL import Image
-from streamlit_option_menu import option_menu
 import requests
-from streamlit_lottie import st_lottie
+import sys
+
+# Handle potential missing packages
+try:
+    from streamlit_option_menu import option_menu
+except ImportError:
+    st.error("Missing package: streamlit-option-menu. Please install using: pip install streamlit-option-menu")
+    option_menu = None
+
+try:
+    from streamlit_lottie import st_lottie
+except ImportError:
+    st.error("Missing package: streamlit-lottie. Please install using: pip install streamlit-lottie")
+    st_lottie = None
 
 # Import custom modules
 from database.db_manager import DatabaseManager
@@ -637,8 +649,10 @@ def my_postings_page():
         </div>
         """, unsafe_allow_html=True)
         
-        # No jobs animation
+        # No jobs animation with fallback
         empty_animation = load_lottie_url("https://assets5.lottiefiles.com/packages/lf20_ydo1amjm.json")
+        if empty_animation is None:
+            empty_animation = load_lottie_fallback()
         display_lottie(empty_animation)
         
         st.markdown("""
@@ -784,8 +798,10 @@ def about_page():
     </div>
     """, unsafe_allow_html=True)
     
-    # About animation
+    # About animation with fallback
     about_animation = load_lottie_url("https://assets1.lottiefiles.com/packages/lf20_v4isjbj5.json")
+    if about_animation is None:
+        about_animation = load_lottie_fallback()
     display_lottie(about_animation, height=300)
     
     st.markdown("""
