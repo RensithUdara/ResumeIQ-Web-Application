@@ -205,54 +205,97 @@ section[data-testid="stSidebar"] > div {
 
 /* File Uploader */
 .stFileUploader {
-  margin-bottom: var(--space-lg);
+  margin-bottom: 20px;
 }
 
 .stFileUploader label {
-  background-color: var(--bg-card);
+  background-color: #f0f7ff;
   color: var(--primary-color);
-  border: 2px dashed var(--primary-light);
-  border-radius: var(--radius-lg);
-  padding: var(--space-xl);
+  border: 1px dashed var(--primary-light);
+  border-radius: 8px;
+  padding: 30px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .stFileUploader label:hover {
-  background-color: var(--neutral-100);
+  background-color: #e1f0ff;
   border-color: var(--primary-color);
+}
+
+/* File upload icon */
+.stFileUploader svg {
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+/* Uploaded file styling */
+.stFileUploader [data-testid="stFileUploaderFileList"] {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 8px;
+  margin-top: 10px;
 }
 
 /* Progress Bar & Metrics */
 .stProgress > div > div > div {
-  background: var(--primary-gradient);
+  background: var(--primary-color);
+  border-radius: 20px;
+}
+
+/* Custom progress bars for skills */
+.skill-progress-container {
+  width: 100%;
+  height: 8px;
+  background-color: #e1f0ff;
+  border-radius: 4px;
+  margin: 8px 0 16px 0;
+  overflow: hidden;
+}
+
+.skill-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+  border-radius: 4px;
 }
 
 .stMetric {
   background-color: var(--bg-card);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  padding: var(--space-md);
-  border-left: 4px solid var(--primary-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 16px;
 }
 
 /* Tabs */
 .stTabs [data-baseweb="tab-list"] {
-  gap: var(--space-xs);
+  gap: 2px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e1f0ff;
 }
 
 .stTabs [data-baseweb="tab"] {
-  height: 50px;
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
-  padding: 0 var(--space-lg);
-  background-color: var(--neutral-100);
+  height: 40px;
+  border-radius: 6px;
+  padding: 0 16px;
+  background-color: transparent;
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.stTabs [data-baseweb="tab"]:hover {
+  background-color: #f5f9ff;
+  color: var(--primary-color);
 }
 
 .stTabs [aria-selected="true"] {
-  background: var(--primary-gradient) !important;
-  color: var(--text-light) !important;
+  background-color: var(--primary-color) !important;
+  color: white !important;
   border-bottom: none !important;
+  font-weight: 600;
 }
 
 /* Tables */
@@ -371,14 +414,20 @@ section[data-testid="stSidebar"] > div {
 
 /* Skill Tags */
 .skill-tag {
-  background: linear-gradient(to right, var(--primary-light), var(--primary-color));
-  color: var(--text-light);
-  border-radius: var(--radius-full);
-  padding: var(--space-xs) var(--space-md);
-  margin: var(--space-xs);
+  background-color: #e1f0ff;
+  color: var(--primary-color);
+  border-radius: 20px;
+  padding: 6px 12px;
+  margin: 4px;
   display: inline-block;
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.skill-tag:hover {
+  background-color: #c8e3ff;
+  transform: translateY(-2px);
 }
 
 /* Job Card */
@@ -437,12 +486,14 @@ footer {
 
 /* Guest mode banner */
 .guest-banner {
-  background: linear-gradient(135deg, var(--secondary-light), var(--secondary-color));
+  background: linear-gradient(90deg, var(--primary-color), #42a5f5);
   color: white;
-  padding: var(--space-md);
-  border-radius: var(--radius-md);
-  margin-bottom: var(--space-lg);
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
   text-align: center;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.2);
 }
 
 /* Progress steps */
