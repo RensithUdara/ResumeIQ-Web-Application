@@ -434,10 +434,15 @@ def main():
             signup_form()
 
 # Page content functions
-def resume_upload_page():
-    st.markdown("""
+def resume_upload_page(guest_mode=False):
+    if guest_mode:
+        title_text = "Analyze Your Resume"
+    else:
+        title_text = "Upload Your Resume"
+        
+    st.markdown(f"""
     <div class="custom-card">
-        <h1 style="color: #4F46E5; text-align: center;">Upload Your Resume</h1>
+        <h1 style="color: #4F46E5; text-align: center;">{title_text}</h1>
         <p style="text-align: center;">Upload your resume to get detailed analysis and improvement suggestions</p>
     </div>
     """, unsafe_allow_html=True)
@@ -456,7 +461,24 @@ def resume_upload_page():
         uploaded_file = st.file_uploader("Upload Your Resume (PDF or DOCX)", type=['pdf', 'docx'])
         
         if uploaded_file is not None:
-            resume_id, file_path = save_uploaded_resume(uploaded_file, st.session_state.user_id)
+            if guest_mode:
+                # For guest users, use a temporary ID and don't save to database
+                resume_id = f"temp_{int(time.time())}"
+                file_extension = uploaded_file.name.split('.')[-1].lower()
+                temp_dir = "temp"
+                
+                # Create temp directory if it doesn't exist
+                os.makedirs(temp_dir, exist_ok=True)
+                
+                file_path = os.path.join(temp_dir, f"{resume_id}.{file_extension}")
+                
+                # Save the file temporarily
+                with open(file_path, "wb") as f:
+                    f.write(uploaded_file.getbuffer())
+                
+                st.session_state.temp_resume_path = file_path
+            else:
+                resume_id, file_path = save_uploaded_resume(uploaded_file, st.session_state.user_id)
             
             if resume_id and file_path:
                 st.success(f"Resume '{uploaded_file.name}' uploaded successfully!")
