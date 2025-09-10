@@ -184,6 +184,9 @@ if 'username' not in st.session_state:
 if 'guest_mode' not in st.session_state:
     st.session_state.guest_mode = False
     
+if 'temp_resume_path' not in st.session_state:
+    st.session_state.temp_resume_path = None
+    
 if 'current_analysis' not in st.session_state:
     st.session_state.current_analysis = None
     
@@ -279,24 +282,77 @@ def signup_form():
                     st.error("Please fill all fields")
 
 def logout():
+    """Function to log out the user"""
+    # Clean up any temporary files
+    if st.session_state.get('temp_resume_path') and os.path.exists(st.session_state.temp_resume_path):
+        try:
+            os.remove(st.session_state.temp_resume_path)
+        except Exception as e:
+            print(f"Error removing temporary file: {e}")
+    
     st.session_state.logged_in = False
     st.session_state.user_id = None
     st.session_state.user_type = None
     st.session_state.username = None
     st.session_state.guest_mode = False
+    st.session_state.temp_resume_path = None
     st.experimental_rerun()
 
 def enable_guest_mode():
+    """Enable guest mode for users without accounts"""
+    # Clean up any previous guest session
+    if st.session_state.get('temp_resume_path') and os.path.exists(st.session_state.temp_resume_path):
+        try:
+            os.remove(st.session_state.temp_resume_path)
+        except Exception as e:
+            print(f"Error removing temporary file: {e}")
+    
     st.session_state.guest_mode = True
     st.session_state.user_type = "job_seeker"
     st.experimental_rerun()
     
 def disable_guest_mode():
+    """Disable guest mode and return to login/signup"""
+    # Clean up any temporary files
+    if st.session_state.get('temp_resume_path') and os.path.exists(st.session_state.temp_resume_path):
+        try:
+            os.remove(st.session_state.temp_resume_path)
+        except Exception as e:
+            print(f"Error removing temporary file: {e}")
+    
     st.session_state.guest_mode = False
+    st.session_state.temp_resume_path = None
     st.experimental_rerun()
 
 # Main App UI
+def cleanup_temp_files():
+    """Clean up old temporary files to prevent disk space issues"""
+    temp_dir = "temp"
+    if not os.path.exists(temp_dir):
+        return
+        
+    try:
+        # Get all files in the temp directory
+        files = [os.path.join(temp_dir, f) for f in os.listdir(temp_dir)]
+        files = [(f, os.path.getmtime(f)) for f in files if os.path.isfile(f)]
+        
+        # Sort by modification time (oldest first)
+        files.sort(key=lambda x: x[1])
+        
+        # Keep only the 10 most recent files, delete the rest
+        if len(files) > 10:
+            for file_path, _ in files[:-10]:
+                try:
+                    os.remove(file_path)
+                except Exception as e:
+                    print(f"Error removing old temporary file {file_path}: {e}")
+    except Exception as e:
+        print(f"Error during temp file cleanup: {e}")
+
 def main():
+    # Clean up old temporary files
+    cleanup_temp_files()
+    
     # Check if required packages are available
     if option_menu is None or st_lottie is None:
         st.error("Required packages are missing. Please install them using the following command:")
