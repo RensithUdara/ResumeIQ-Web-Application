@@ -135,3 +135,6 @@ static/images/*
 node_modules
 .env
 .vscode/
+.env.*
+.env.local
+.env.production
