@@ -133,5 +133,4 @@ database/resume_analyzer.db
 static/images/*
 !static/images/.gitkeep
 node_modules
-.env
-.vscode/
+config.bat
