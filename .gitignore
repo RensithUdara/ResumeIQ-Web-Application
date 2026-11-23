@@ -133,4 +133,7 @@ database/resume_analyzer.db
 static/images/*
 !static/images/.gitkeep
 node_modules
-config.bat
+.env
+.env.*
+.env.local
+.env.production
